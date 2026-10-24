@@ -1,0 +1,30 @@
+{
+  "data": {
+    "data_dir": "data",
+    "image_dir": null,
+    "image_col": null,
+    "label_col": null,
+    "img_size": 256,
+    "batch_size": 16,
+    "num_workers": 2,
+    "use_aug": true
+  },
+  "model": {
+    "name": "efficientnet_b3",
+    "num_classes": 9,
+    "pretrained": true
+  },
+  "train": {
+    "epochs": 20,
+    "lr": 5e-05,
+    "weight_decay": 0.0001,
+    "label_smoothing": 0.1,
+    "balance": "sqrt_weighted_loss",
+    "patience": 6,
+    "seed": 42,
+    "amp": true,
+    "deterministic": false,
+    "run_root": "runs",
+    "run_name": "exp-effb3-sqrt"
+  }
+}

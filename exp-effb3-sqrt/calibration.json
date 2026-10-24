@@ -1,0 +1,26 @@
+{
+  "original_macro_f1": 0.81808436493288,
+  "calibrated_macro_f1": 0.8567537481665938,
+  "multipliers": [
+    0.31934,
+    0.69883,
+    0.85973,
+    1.20019,
+    0.91255,
+    0.73756,
+    1.45401,
+    0.0987,
+    1.84227
+  ],
+  "class_names": [
+    "Chinee apple",
+    "Lantana",
+    "Parkinsonia",
+    "Parthenium",
+    "Prickly acacia",
+    "Rubber vine",
+    "Siam weed",
+    "Snake weed",
+    "Negative"
+  ]
+}
