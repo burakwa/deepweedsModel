@@ -1,0 +1,19 @@
+# DeepWeeds - Streamlit ot sınıflandırma uygulaması bağımlılıkları
+# Python 3.12 ile test edildi.
+
+# Model / derin öğrenme
+torch>=2.1
+torchvision>=0.16
+timm>=1.0.3
+
+# Veri işleme
+numpy>=1.26
+pandas>=2.0
+Pillow>=10.0
+opencv-python>=4.9
+
+# Arayüz
+streamlit>=1.47
+
+# Test
+pytest>=8.0

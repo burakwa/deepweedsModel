@@ -27,8 +27,8 @@ import streamlit as st
 import torch
 from PIL import Image
 
-from deepweeds.config import CLASS_NAMES
-from deepweeds.inference import Predictor
+from config import CLASS_NAMES
+from inference import Predictor
 
 NEGATIVE_CLASS = "Negative"
 
@@ -761,13 +761,23 @@ class ThemeRenderer:
 
     @staticmethod
     def get_leaf_b64() -> str:
+        """Logo görselini assets/leaf.jpeg'den base64'e çevirir (disk I/O tek seferlik)."""
         for path in [
-            Path("template/leaf.jpeg"),
-            Path(__file__).resolve().parent.parent.parent / "template" / "leaf.jpeg",
+            Path("assets/leaf.jpeg"),
+            Path(__file__).resolve().parent / "assets" / "leaf.jpeg",
         ]:
             if path.exists():
                 return base64.b64encode(path.read_bytes()).decode("utf-8")
         return ""
+
+    @staticmethod
+    def fallback_leaf_data_uri() -> str:
+        """assets/leaf.jpeg bulunamazsa şeffaf 1px yedek (harici istek yok)."""
+        px = (
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMA"
+            "AABAQAQFgAABkgBBBOsUAAAAAElFTkSuQmCC"
+        )
+        return f"data:image/png;base64,{px}"
 
     @staticmethod
     def arch_subtitle(service: ModelService) -> str:
@@ -1483,7 +1493,7 @@ class ThemeRenderer:
         leaf_src = (
             f"data:image/jpeg;base64,{leaf_b64}"
             if leaf_b64
-            else "https://cdn-icons-png.flaticon.com/512/628/628324.png"
+            else cls.fallback_leaf_data_uri()
         )
         status_text = "CUDA Aktif" if service.is_cuda else "CPU Aktif"
 
