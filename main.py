@@ -461,28 +461,30 @@ class PlantDetector:
         n = len(boxes)
         chip = f"{n} bitki"
         (cw, chh), _ = cv2.getTextSize(chip, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
-        cv2.rectangle(img, (8, 8), (8 + cw + 16, 8 + chh + 14), (20, 20, 20), -1)
+        cv2.rectangle(img, (8, 8), (8 + cw + 16, 8 + chh + 14), (255, 255, 255), -1)
+        cv2.rectangle(img, (8, 8), (8 + cw + 16, 8 + chh + 14), (80, 62, 44), 1)
         cv2.putText(
             img,
             chip,
             (16, 8 + chh + 6),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.7,
-            (255, 255, 255),
+            (80, 62, 44),
             2,
             cv2.LINE_AA,
         )
 
         tstamp = f"{t_sec:.1f} sn"
         (tw2, th2), _ = cv2.getTextSize(tstamp, cv2.FONT_HERSHEY_SIMPLEX, 0.55, 1)
-        cv2.rectangle(img, (fw - tw2 - 24, 8), (fw - 8, 8 + th2 + 12), (20, 20, 20), -1)
+        cv2.rectangle(img, (fw - tw2 - 24, 8), (fw - 8, 8 + th2 + 12), (255, 255, 255), -1)
+        cv2.rectangle(img, (fw - tw2 - 24, 8), (fw - 8, 8 + th2 + 12), (80, 62, 44), 1)
         cv2.putText(
             img,
             tstamp,
             (fw - tw2 - 20, 8 + th2 + 4),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.55,
-            (255, 255, 255),
+            (80, 62, 44),
             1,
             cv2.LINE_AA,
         )
@@ -832,47 +834,72 @@ class ThemeRenderer:
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
             }
 
+            html, body, [data-testid="stAppViewContainer"] {
+                overflow-x: hidden !important;
+                -webkit-tap-highlight-color: transparent;
+            }
+
             .main .block-container {
                 max-width: 100% !important;
                 padding: 0 !important;
                 margin: 0 !important;
             }
 
-            /* ÜSTTEKİ LACİVERT YATAY ŞERİT */
+            /* ÜSTTEKİ AYDINLIK YATAY ŞERİT (beyaz yüzey + lacivert metin vurgusu) */
+            :root {
+                --nav-h: 64px;
+                --ink: #2c3e50;
+                --ink-soft: #5d6d7e;
+                --surface: #ffffff;
+                --surface-2: #f2f5f8;
+                --card-light: #eaeef3;
+                --card-light-hover: #e0e7ee;
+            }
+
             .top-navbar {
                 position: fixed;
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 70px;
-                background-color: #2c3e50;
-                box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+                height: var(--nav-h);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(244, 247, 250, 0.94) 100%);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                border-bottom: 1px solid rgba(44, 62, 80, 0.10);
+                box-shadow: 0 4px 18px rgba(44, 62, 80, 0.10);
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 z-index: 997;
                 box-sizing: border-box;
+                padding-left: env(safe-area-inset-left, 0px);
+                padding-right: calc(env(safe-area-inset-right, 0px) + 8px);
             }
 
             .navbar-title {
                 font-family: 'Franklin Gothic Medium', sans-serif;
-                font-size: 1.4rem;
-                color: #ecf0f1;
-                letter-spacing: 1px;
-                margin-left: 80px;
+                font-size: 1.35rem;
+                font-weight: 700;
+                color: var(--ink);
+                letter-spacing: 1.5px;
+                margin-left: 78px;
+                white-space: nowrap;
+                text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
             }
 
             .navbar-chip {
-                background: #283747;
-                color: #2ecc71;
-                padding: 5px 12px;
+                background: rgba(46, 204, 113, 0.10);
+                border: 1px solid rgba(46, 204, 113, 0.35);
+                color: #16a085;
+                padding: 5px 13px;
                 border-radius: 15px;
-                font-size: 0.85rem;
+                font-size: 0.84rem;
                 font-weight: 600;
                 display: flex;
                 align-items: center;
                 gap: 7px;
-                margin-right: 25px;
+                margin-right: 18px;
+                white-space: nowrap;
             }
 
             .chip-dot {
@@ -894,7 +921,10 @@ class ThemeRenderer:
                 left: 0;
                 width: 100vw;
                 height: 100vh;
-                background-color: rgba(0,0,0,0.4);
+                height: 100dvh;
+                background-color: rgba(44, 62, 80, 0.22);
+                backdrop-filter: blur(2px);
+                -webkit-backdrop-filter: blur(2px);
                 opacity: 0;
                 visibility: hidden;
                 transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -904,19 +934,25 @@ class ThemeRenderer:
             .sidebar-panel {
                 position: fixed;
                 top: 0;
-                left: -280px;
-                width: 260px;
-                height: 100vh;
-                background-color: #2c3e50;
-                box-shadow: 4px 0px 20px rgba(0,0,0,0.5);
-                transition: left 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease, visibility 0.6s ease;
+                left: 0;
+                width: min(280px, 82vw);
+                max-width: 82vw;
+                min-height: 100vh;
+                min-height: 100dvh;
+                background: linear-gradient(180deg, #ffffff 0%, var(--surface-2) 100%);
+                border-right: 1px solid rgba(44, 62, 80, 0.08);
+                box-shadow: 6px 0 24px rgba(44, 62, 80, 0.16);
+                transition: left 0.4s cubic-bezier(0.32, 1, 0.5, 1), opacity 0.35s ease, visibility 0.35s ease;
                 opacity: 0;
                 visibility: hidden;
                 z-index: 999;
                 display: flex;
                 flex-direction: column;
-                padding: 85px 20px 30px 20px;
                 box-sizing: border-box;
+                transform: translateX(-100%);
+                padding: calc(76px + env(safe-area-inset-top, 0px)) 18px calc(28px + env(safe-area-inset-bottom, 0px)) 18px;
+                overflow-y: auto;
+                overscroll-behavior: contain;
             }
 
             .sidebar-toggle-input:checked ~ .sidebar-overlay {
@@ -925,13 +961,79 @@ class ThemeRenderer:
             }
 
             .sidebar-toggle-input:checked ~ .sidebar-panel {
-                left: 0;
                 opacity: 1;
                 visibility: visible;
+                transform: translateX(0);
             }
 
             .sidebar-toggle-input:checked ~ .menu-btn img {
                 transform: rotate(360deg);
+            }
+
+            /* PANEL KAPAK BAŞLIĞI */
+            .panel-head {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 4px 4px 16px 4px;
+                border-bottom: 1px solid rgba(44, 62, 80, 0.10);
+                margin-bottom: 18px;
+            }
+
+            .panel-logo {
+                width: 34px;
+                height: 34px;
+                border-radius: 9px;
+                object-fit: cover;
+                box-shadow: 0 1px 3px rgba(44, 62, 80, 0.2);
+            }
+
+            .panel-title {
+                flex: 1;
+                font-family: 'Franklin Gothic Medium', sans-serif;
+                font-size: 1rem;
+                font-weight: 600;
+                letter-spacing: 0.8px;
+                color: var(--ink);
+                white-space: nowrap;
+            }
+
+            .panel-close {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 9px;
+                background: rgba(44, 62, 80, 0.06);
+                color: #7f8c8d;
+                font-size: 1.25rem;
+                line-height: 1;
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
+                transition: background-color 0.2s ease, color 0.2s ease;
+            }
+
+            .panel-close:hover {
+                background: rgba(192, 57, 43, 0.10);
+                color: #c0392b;
+            }
+
+            .panel-close:active {
+                transform: scale(0.92);
+            }
+
+            .panel-foot {
+                margin-top: auto;
+                padding-top: 14px;
+                border-top: 1px solid rgba(44, 62, 80, 0.10);
+                font-size: 0.78rem;
+                letter-spacing: 0.6px;
+                color: #95a5a6;
+                text-align: center;
+                text-transform: uppercase;
+                font-weight: 600;
             }
 
             .sidebar-menu {
@@ -946,25 +1048,37 @@ class ThemeRenderer:
 
             .sidebar-card {
                 display: block;
-                padding: 14px 16px;
-                color: #bdc3c7;
+                padding: 13px 15px;
+                color: var(--ink-soft);
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                border-radius: 10px;
-                background-color: #283747;
-                box-shadow: inset 0px 2px 4px rgba(0,0,0,0.4), 0px 1px 0px rgba(255,255,255,0.1);
-                transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+                border-radius: 12px;
+                background-color: var(--card-light);
+                box-shadow:
+                    inset 2px 2px 5px rgba(44, 62, 80, 0.10),
+                    inset -2px -2px 5px rgba(255, 255, 255, 0.9),
+                    0 1px 2px rgba(255, 255, 255, 0.7);
+                transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
                 cursor: pointer;
                 overflow: hidden;
+                user-select: none;
+                -webkit-user-select: none;
+                -webkit-tap-highlight-color: transparent;
             }
 
             .sidebar-card:hover {
-                background-color: #212f3d;
+                background-color: var(--card-light-hover);
+                transform: translateX(2px);
+            }
+
+            .sidebar-card:active {
+                background-color: #d9e0e8;
+                transform: translateX(0) scale(0.99);
             }
 
             .card-title {
                 font-weight: 600;
                 font-size: 1.05rem;
-                color: #ecf0f1;
+                color: var(--ink);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -973,7 +1087,7 @@ class ThemeRenderer:
             .card-title::after {
                 content: '▾';
                 font-size: 0.9rem;
-                color: #7f8c8d;
+                color: #95a5a6;
                 transition: transform 0.3s ease, color 0.3s ease;
             }
 
@@ -982,7 +1096,7 @@ class ThemeRenderer:
                 opacity: 0;
                 overflow: hidden;
                 font-size: 0.88rem;
-                color: #abb2b9;
+                color: #7a8a99;
                 font-weight: 400;
                 margin-top: 0;
                 line-height: 1.4;
@@ -991,7 +1105,7 @@ class ThemeRenderer:
 
             .sidebar-card:hover .card-title::after {
                 transform: rotate(180deg);
-                color: #3498db;
+                color: #2980b9;
             }
 
             .sidebar-card:hover .card-detail {
@@ -999,7 +1113,7 @@ class ThemeRenderer:
                 opacity: 1;
                 margin-top: 10px;
                 padding-top: 8px;
-                border-top: 1px solid rgba(255,255,255,0.08);
+                border-top: 1px solid rgba(44, 62, 80, 0.10);
             }
 
             /* SÍDEBAR BUTONU */
@@ -1008,41 +1122,62 @@ class ThemeRenderer:
                 z-index: 1000;
                 width: 46px;
                 height: 46px;
-                background-color: #283747;
-                border: none;
+                background-color: #ffffff;
+                border: 1px solid rgba(44, 62, 80, 0.10);
                 border-radius: 12px;
                 cursor: pointer;
                 padding: 0;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: inset 0px 2px 4px rgba(0,0,0,0.6), 0px 1px 0px rgba(255,255,255,0.15);
-                transition: opacity 0.6s ease, background-color 0.2s ease;
-                opacity: 1;
-                top: 12px;
-                left: 20px;
+                box-shadow:
+                    inset 2px 2px 5px rgba(44, 62, 80, 0.10),
+                    inset -2px -2px 5px rgba(255, 255, 255, 0.95),
+                    0 2px 8px rgba(44, 62, 80, 0.12);
+                transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+                top: calc((var(--nav-h) - 46px) / 2);
+                left: 18px;
                 overflow: hidden;
+                user-select: none;
+                -webkit-user-select: none;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
             }
 
             .menu-btn:hover {
-                background-color: #212f3d;
+                background-color: var(--card-light-hover);
+                transform: translateY(-1px);
+            }
+
+            .menu-btn:active {
+                transform: scale(0.94);
+                box-shadow:
+                    inset 2px 2px 6px rgba(44, 62, 80, 0.18),
+                    inset -2px -2px 6px rgba(255, 255, 255, 0.7);
+            }
+
+            .menu-btn:focus-visible {
+                outline: 2px solid #16a085;
+                outline-offset: 2px;
             }
 
             .menu-btn img {
-                width: 50px;
-                height: 50px;
-                filter: invert(1);
-                mix-blend-mode: screen;
-                transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+                width: 28px;
+                height: 28px;
+                border-radius: 7px;
+                object-fit: cover;
+                box-shadow: 0 1px 3px rgba(44, 62, 80, 0.25);
+                transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
             }
 
             /* ORTADAKİ BÜYÜK BAŞLIK */
             .title-container {
                 position: relative;
                 text-align: center;
-                margin-top: 200px;
+                margin-top: clamp(120px, 20vh, 200px);
                 font-family: 'Franklin Gothic Medium', sans-serif;
-                font-size: 6rem;
+                font-size: clamp(2.5rem, 8.5vw, 6rem);
+                line-height: 1.05;
                 color: #d0d0d0;
                 letter-spacing: 2px;
                 text-shadow:
@@ -1063,8 +1198,8 @@ class ThemeRenderer:
                 top: -42px;
                 left: 90%;
                 transform: translateX(-50%);
-                width: 75px;
-                height: 75px;
+                width: clamp(48px, 9vw, 75px);
+                height: clamp(48px, 9vw, 75px);
                 fill: #cccccc;
                 filter:
                     drop-shadow(0 -1px 0 rgba(0,0,0,0.8))
@@ -1090,20 +1225,22 @@ class ThemeRenderer:
                 text-align: center;
                 margin-top: 10px;
                 margin-bottom: 45px;
+                padding: 0 20px;
                 font-family: 'Franklin Gothic Medium', sans-serif;
-                color: #cccccc;
-                font-size: 1.15rem;
+                color: #b3bcc4;
+                font-size: clamp(0.92rem, 2.5vw, 1.15rem);
                 letter-spacing: 0.5px;
+                text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
             }
 
             /* GÖRSEL / VİDEO YÜKLEME KUTULARI (template: 220x200) */
             div[data-testid="stFileUploader"] {
-                width: 220px !important;
+                width: min(220px, 100%) !important;
                 margin: 0 auto !important;
             }
 
             div[data-testid="stFileUploader"] section[data-testid="stFileUploadDropzone"] {
-                width: 220px !important;
+                width: 100% !important;
                 height: 200px !important;
                 min-height: 200px !important;
                 max-height: 200px !important;
@@ -1119,6 +1256,8 @@ class ThemeRenderer:
                 transition: all 0.3s ease !important;
                 padding: 10px !important;
                 box-sizing: border-box !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
             }
 
             div[data-testid="stFileUploader"] section[data-testid="stFileUploadDropzone"]:hover {
@@ -1191,8 +1330,8 @@ class ThemeRenderer:
             /* SONUÇ KARTI - template: #resultsSection */
             .results-card {
                 width: 100%;
-                max-width: 900px;
-                margin: 140px auto 0 auto;
+                max-width: min(900px, 96vw);
+                margin: 140px auto 20px auto;
                 background: #ededed;
                 border-radius: 15px;
                 padding: 30px;
@@ -1431,54 +1570,213 @@ class ThemeRenderer:
             /* ANA EKRANA DÖN (template: .back-btn) */
             div.stButton > button {
                 padding: 12px 20px !important;
-                background-color: #2c3e50 !important;
-                color: #ecf0f1 !important;
+                background: linear-gradient(180deg, #ffffff 0%, #e7ecf1 100%) !important;
+                color: var(--ink) !important;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
                 font-size: 1rem !important;
                 font-weight: 600 !important;
                 text-align: center !important;
-                border: none !important;
+                border: 1px solid rgba(44, 62, 80, 0.12) !important;
                 border-radius: 12px !important;
                 cursor: pointer !important;
                 box-shadow:
-                    inset 0px 2px 4px rgba(255,255,255,0.2),
-                    inset 0px -2px 4px rgba(0,0,0,0.4),
-                    0 6px 15px rgba(0,0,0,0.2) !important;
-                text-shadow: 0 -1px 0 rgba(0,0,0,0.6) !important;
+                    inset 2px 2px 5px rgba(255, 255, 255, 0.95),
+                    inset -2px -2px 5px rgba(44, 62, 80, 0.08),
+                    0 6px 15px rgba(44, 62, 80, 0.14) !important;
+                text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85) !important;
                 transition: all 0.2s ease !important;
             }
 
             div.stButton > button:hover {
-                background-color: #212f3d !important;
+                background: linear-gradient(180deg, #ffffff 0%, #dce4ec 100%) !important;
                 transform: translateY(-2px) !important;
                 box-shadow:
-                    inset 0px 2px 4px rgba(255,255,255,0.3),
-                    inset 0px -2px 4px rgba(0,0,0,0.5),
-                    0 8px 20px rgba(0,0,0,0.3) !important;
-                color: #ffffff !important;
+                    inset 2px 2px 5px rgba(255, 255, 255, 0.95),
+                    inset -2px -2px 5px rgba(44, 62, 80, 0.08),
+                    0 8px 20px rgba(44, 62, 80, 0.20) !important;
+                color: #22303f !important;
             }
 
             div.stButton > button:active {
                 transform: translateY(1px) !important;
-                box-shadow: inset 0px 2px 5px rgba(0,0,0,0.5) !important;
+                box-shadow: inset 2px 3px 6px rgba(44, 62, 80, 0.18) !important;
             }
 
+            /* ------------------------------------------------------------------
+               RESPONSIVE
+               ------------------------------------------------------------------ */
             @media (max-width: 900px) {
                 .results-card {
                     grid-template-columns: 1fr;
+                    grid-template-areas: "media" "info";
                     margin-top: 100px;
-                }
-                .title-container {
-                    font-size: 4rem;
-                    margin-top: 140px;
+                    gap: 16px 20px;
                 }
                 .title-leaf-svg {
-                    width: 52px;
-                    height: 52px;
                     top: -28px;
                 }
                 .frame-grid {
                     grid-template-columns: 1fr;
+                }
+                .navbar-title {
+                    margin-left: 74px;
+                }
+            }
+
+            @media (max-width: 640px) {
+                :root {
+                    --nav-h: 58px;
+                }
+                .menu-btn {
+                    width: 42px;
+                    height: 42px;
+                    left: 12px;
+                    border-radius: 11px;
+                }
+                .menu-btn img {
+                    width: 26px;
+                    height: 26px;
+                }
+                .navbar-title {
+                    font-size: 1.05rem;
+                    margin-left: 66px;
+                    letter-spacing: 1px;
+                }
+                .navbar-chip {
+                    padding: 4px 10px;
+                    font-size: 0.72rem;
+                    gap: 5px;
+                    margin-right: 10px;
+                }
+                .chip-dot {
+                    width: 6px;
+                    height: 6px;
+                }
+                .sidebar-menu li {
+                    margin-bottom: 11px;
+                }
+                .sidebar-card {
+                    padding: 12px 13px;
+                }
+                .card-title {
+                    font-size: 0.98rem;
+                }
+                .card-detail {
+                    font-size: 0.84rem;
+                }
+                .panel-logo {
+                    width: 30px;
+                    height: 30px;
+                }
+                .panel-title {
+                    font-size: 0.92rem;
+                }
+                .title-container {
+                    margin-top: 128px;
+                    letter-spacing: 1px;
+                }
+                .title-leaf-svg {
+                    top: -24px;
+                    width: 44px;
+                    height: 44px;
+                }
+                .hero-subtitle {
+                    margin-bottom: 32px;
+                    padding: 0 16px;
+                }
+                div[data-testid="stFileUploader"] {
+                    width: 100% !important;
+                    max-width: 260px;
+                }
+                div[data-testid="stFileUploader"] section[data-testid="stFileUploadDropzone"] {
+                    height: 170px !important;
+                    min-height: 170px !important;
+                    max-height: 170px !important;
+                }
+                .sample-tray {
+                    width: 94%;
+                    margin: 18px auto 28px auto;
+                }
+                .sample-tray-title {
+                    font-size: 0.78rem;
+                }
+                .results-card {
+                    margin-top: 92px;
+                    padding: 16px;
+                    border-radius: 13px;
+                }
+                .result-media-box {
+                    padding: 12px;
+                }
+                .result-media-box img,
+                .result-media-box video {
+                    max-height: 52vw;
+                }
+                .status-tag {
+                    font-size: 0.8rem;
+                }
+                .press-result {
+                    font-size: 1.25rem;
+                }
+                .confidence-badge {
+                    font-size: 1.05rem;
+                    padding: 9px 16px;
+                }
+                .desc-box {
+                    font-size: 0.82rem;
+                }
+                .count-chip {
+                    font-size: 0.78rem;
+                    padding: 5px 10px;
+                }
+                .prob-row {
+                    font-size: 0.78rem;
+                }
+                .prob-row > span:first-child {
+                    min-width: 0 !important;
+                    flex: 1 1 auto;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+                .prob-row > .prob-track {
+                    margin: 0 8px;
+                }
+                .prob-row > span:last-child {
+                    min-width: 38px !important;
+                }
+                .frame-item img {
+                    max-height: 190px;
+                }
+                .frame-item .frame-label {
+                    font-size: 0.74rem;
+                }
+            }
+
+            /* Yatay / kısa ekranlar: hero'yu sıkıştır */
+            @media (max-height: 500px) and (orientation: landscape) {
+                .title-container {
+                    margin-top: 88px;
+                }
+                .results-card {
+                    margin-top: 68px;
+                }
+            }
+
+            /* Hareket azaltma tercihi */
+            @media (prefers-reduced-motion: reduce) {
+                .title-leaf-svg {
+                    animation: none !important;
+                }
+                .sidebar-panel,
+                .sidebar-overlay,
+                .menu-btn,
+                .menu-btn img,
+                .sidebar-card {
+                    transition: none !important;
+                }
+                .results-card {
+                    animation: none !important;
                 }
             }
             </style>
@@ -1488,7 +1786,13 @@ class ThemeRenderer:
 
     @classmethod
     def render_navbar_and_sidebar(cls, service: ModelService) -> None:
-        """Üst lacivert barı ve açılır yan panel kartlarını çizer."""
+        """Üst lacivert barı ve açılır yan panel kartlarını çizer.
+
+        ``menu-root`` sarmalayıcısı zorunludur: Streamlit HTML'i paragraf
+        bloklarına bölebildiğinden ``input``/``label`` ve ``.sidebar-panel``
+        aynı üst etiket altında kalmazsa CSS ``~`` seçicisi eşleşmez ve
+        menü açılmaz.
+        """
         leaf_b64 = cls.get_leaf_b64()
         leaf_src = (
             f"data:image/jpeg;base64,{leaf_b64}"
@@ -1500,64 +1804,72 @@ class ThemeRenderer:
         st.markdown(
             cls._compact_html(
                 f"""
-            <input type="checkbox" id="sidebarToggle" class="sidebar-toggle-input">
+            <div class="menu-root">
+                <input type="checkbox" id="sidebarToggle" class="sidebar-toggle-input">
 
-            <label for="sidebarToggle" class="menu-btn" title="Model Bilgisi">
-                <img src="{leaf_src}" alt="Menü">
-            </label>
+                <label for="sidebarToggle" class="menu-btn" title="Model Bilgi Menüsü" aria-label="Menüyü aç/kapat">
+                    <img src="{leaf_src}" alt="Menü">
+                </label>
 
-            <label for="sidebarToggle" class="sidebar-overlay"></label>
+                <label for="sidebarToggle" class="sidebar-overlay"></label>
 
-            <div class="sidebar-panel">
-                <ul class="sidebar-menu">
-                    <li>
-                        <div class="sidebar-card">
-                            <div class="card-title">Model Bilgisi</div>
-                            <div class="card-detail">
-                                {cls.arch_subtitle(service)} mimarisiyle eğitilmiş özel derin öğrenme sınıflandırma modeli.
+                <div class="sidebar-panel">
+                    <div class="panel-head">
+                        <img class="panel-logo" src="{leaf_src}" alt="">
+                        <span class="panel-title">Model Paneli</span>
+                        <label for="sidebarToggle" class="panel-close" title="Kapat" aria-label="Menüyü kapat">&times;</label>
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li>
+                            <div class="sidebar-card">
+                                <div class="card-title">Model Bilgisi</div>
+                                <div class="card-detail">
+                                    {cls.arch_subtitle(service)} mimarisiyle eğitilmiş özel derin öğrenme sınıflandırma modeli.
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="sidebar-card">
-                            <div class="card-title">Cihaz</div>
-                            <div class="card-detail">
-                                {status_text} ({service.device_name}).
+                        </li>
+                        <li>
+                            <div class="sidebar-card">
+                                <div class="card-title">Cihaz</div>
+                                <div class="card-detail">
+                                    {status_text} ({service.device_name}).
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="sidebar-card">
-                            <div class="card-title">Model Boyutu</div>
-                            <div class="card-detail">
-                                Yaklaşık {service.model_size_mb:.1f} MB (.pt ağırlık dosyası).
+                        </li>
+                        <li>
+                            <div class="sidebar-card">
+                                <div class="card-title">Model Boyutu</div>
+                                <div class="card-detail">
+                                    Yaklaşık {service.model_size_mb:.1f} MB (.pt ağırlık dosyası).
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="sidebar-card">
-                            <div class="card-title">Giriş Boyutu</div>
-                            <div class="card-detail">
-                                {service.img_size}x{service.img_size} piksel RGB çözünürlük standart girdi boyutu.
+                        </li>
+                        <li>
+                            <div class="sidebar-card">
+                                <div class="card-title">Giriş Boyutu</div>
+                                <div class="card-detail">
+                                    {service.img_size}x{service.img_size} piksel RGB çözünürlük standart girdi boyutu.
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="sidebar-card">
-                            <div class="card-title">Sınıf Sayısı</div>
-                            <div class="card-detail">
-                                9 farklı yabani ot (weed) türü sınıflandırma kapasitesi.
+                        </li>
+                        <li>
+                            <div class="sidebar-card">
+                                <div class="card-title">Sınıf Sayısı</div>
+                                <div class="card-detail">
+                                    9 farklı yabani ot (weed) türü sınıflandırma kapasitesi.
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                        </li>
+                    </ul>
+                    <div class="panel-foot">DEEPWEEDS AI &middot; {status_text}</div>
+                </div>
 
-            <div class="top-navbar">
-                <div class="navbar-title">DEEPWEEDS AI</div>
-                <div class="navbar-chip">
-                    <span class="chip-dot"></span>
-                    {status_text}
+                <div class="top-navbar">
+                    <div class="navbar-title">DEEPWEEDS AI</div>
+                    <div class="navbar-chip">
+                        <span class="chip-dot"></span>
+                        {status_text}
+                    </div>
                 </div>
             </div>
             """
