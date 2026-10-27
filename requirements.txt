@@ -10,7 +10,10 @@ timm>=1.0.3
 numpy>=1.26
 pandas>=2.0
 Pillow>=10.0
-opencv-python>=4.9
+
+# OpenCV: Streamlit Cloud'da libGL yok -> headless sürüm kullan.
+# >=4.10 gerekir çünkü eski wheel'ler NumPy 2.x ile import ASE hatası verir.
+opencv-python-headless>=4.10
 
 # Arayüz
 streamlit>=1.47
